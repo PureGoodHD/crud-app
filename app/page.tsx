@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from "next/link";
 
 import { StudentTable } from "@/components/student-table";
@@ -12,23 +14,29 @@ import {
 import { prisma } from "@/lib/prisma";
 
 export default async function Home() {
-  const students = await prisma.student.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 20,
-  });
+  let tableData = [];
+  
+  try {
+    const students = await prisma.student.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 20,
+    });
 
-  const tableData = students.map((student) => ({
-    id: student.id,
-    studentNumber: student.studentNumber,
-    firstName: student.firstName,
-    lastName: student.lastName,
-    middleName: student.middleName,
-    age: student.age,
-    address: student.address,
-    gradeLevel: student.gradeLevel,
-  }));
+    tableData = students.map((student) => ({
+      id: student.id,
+      studentNumber: student.studentNumber,
+      firstName: student.firstName,
+      lastName: student.lastName,
+      middleName: student.middleName,
+      age: student.age,
+      address: student.address,
+      gradeLevel: student.gradeLevel,
+    }));
+  } catch (error) {
+    console.error("Database error:", error);
+  }
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-10 sm:px-6 lg:px-8">
