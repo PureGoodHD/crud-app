@@ -31,7 +31,7 @@ async function getStudents() {
 export default async function Home() {
   const students = await getStudents();
 
-  const tableData = students.map((student) => ({
+  const tableData = students.map((student: typeof students[0]) => ({
     id: student.id,
     studentNumber: student.studentNumber,
     firstName: student.firstName,
