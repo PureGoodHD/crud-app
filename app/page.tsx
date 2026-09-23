@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 import Link from "next/link";
+import { Prisma } from "@prisma/client";
 
 import { StudentTable } from "@/components/student-table";
 import { buttonVariants } from "@/components/ui/button";
@@ -14,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
 
-async function getStudents() {
+async function getStudents(): Promise<Prisma.StudentGetPayload<{}>[]> {
   try {
     return await prisma.student.findMany({
       orderBy: {
@@ -31,7 +32,7 @@ async function getStudents() {
 export default async function Home() {
   const students = await getStudents();
 
-  const tableData = students.map((student: (typeof students)[number]) => ({
+  const tableData = students.map((student) => ({
     id: student.id,
     studentNumber: student.studentNumber,
     firstName: student.firstName,
